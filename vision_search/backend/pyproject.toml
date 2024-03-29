@@ -13,6 +13,7 @@ torch = "^2.2.2"
 timm = "^0.9.16"
 numpy = "^1.26.4"
 pillow = "^10.2.0"
+python-multipart = "^0.0.9"
 
 
 [build-system]
