@@ -8,6 +8,7 @@ class Metadata(BaseModel):
 
 class SearchResult(BaseModel):
     results: list[Metadata]
+    request_id: str
 
 
 class TextQueryData(BaseModel):

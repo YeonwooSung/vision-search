@@ -17,6 +17,8 @@ async def search_by_text(
     request: Request,
     data: TextQueryData,
 ):
+    req_id = request.state.request_id
+
     query = data.query
     if not query or len(query) < 3:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Query must be at least 3 characters long")
@@ -26,7 +28,7 @@ async def search_by_text(
     results = []
 
     # return the search results
-    return SearchResult(results=results)
+    return SearchResult(results=results, req_id=req_id)
 
 
 @r.post("/query/image")
@@ -34,7 +36,8 @@ async def search_by_image(
     request: Request,
     img_file: UploadFile = Form(...),
 ):
-    # search images by image content
+    req_id = request.state.request_id
+
     # validate image
     if img_file.content_type not in ['image/png', 'image/jpeg', 'image/jpg']:
         logger.log_warning(f'Invalid image: image type is not supported: image="{img_file.filename}"')
@@ -47,4 +50,4 @@ async def search_by_image(
     results = []
 
     # return the search results
-    return SearchResult(results=results)
+    return SearchResult(results=results, req_id=req_id)
