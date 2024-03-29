@@ -1,20 +1,25 @@
 import timm
 import torch
 import numpy as np
+from PIL import Image
 
 # custom module
 from backend.utils import Singleton
 
 
 class FeatureExtractor(metaclass=Singleton):
-    def __init__(self, model_path:str="resnet34", device:str="cpu"):
+    def __init__(self, model_path:str="resnet34", device:str="cpu", img_size:int=224):
         self.model_path = model_path
         self.device = torch.device(device)
         self.model = timm.create_model(model_path, pretrained=True)
         self.model.to(self.device)
         self.model.eval()
+        self.img_size = img_size
 
     def extract_features(self, image:np.ndarray, normalize:bool=True):
+        # resize the image
+        image = np.array(Image.fromarray(image).resize((self.img_size, self.img_size)))
+
         # extract features from the image
         with torch.no_grad():
             image = torch.from_numpy(image).unsqueeze(0).to(self.device)

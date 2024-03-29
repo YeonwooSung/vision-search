@@ -12,6 +12,7 @@ uvicorn = "^0.29.0"
 torch = "^2.2.2"
 timm = "^0.9.16"
 numpy = "^1.26.4"
+pillow = "^10.2.0"
 
 
 [build-system]
