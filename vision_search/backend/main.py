@@ -11,11 +11,14 @@ sys.path.append("..")
 
 from backend.server.app import init_app
 from backend.utils import Logger
+from backend.api.search import search_router
 
 app: FastAPI = init_app(use_cors=True, cors_headers=["*"], cors_methods=["*"], cors_origins=["*"])
 logger = Logger()
 
-# app.include_router(chat_router, prefix="/api/chat")
+# add API routers
+app.include_router(search_router, prefix="/api/search")
+
 
 #
 # exception handling
