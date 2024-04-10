@@ -10,7 +10,7 @@ class ThreadPoolEngine:
         self.feature_extractor = FeatureExtractor(model_path=model, device=device, img_size=img_size)
 
     def run_engine(self, image: np.ndarray) -> np.ndarray:
-        return self.executor.submit(self.feature_extractor.extract_features, image).result()
+        return self.executor.submit(self.feature_extractor.get_image_features, image).result()
 
     async def arun_engine(self, images: np.ndarray) -> np.ndarray:
-        return await self.executor.submit(self.feature_extractor.extract_features, images)
+        return await self.executor.submit(self.feature_extractor.get_image_features, images)

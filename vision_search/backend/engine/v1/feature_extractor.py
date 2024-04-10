@@ -16,15 +16,15 @@ class FeatureExtractor(metaclass=Singleton):
         self.model.eval()
         self.img_size = img_size
 
-    def extract_features(self, image:np.ndarray, normalize:bool=True):
+    @torch.no_grad()
+    def get_image_features(self, image:np.ndarray, normalize:bool=True):
         # resize the image
         image = np.array(Image.fromarray(image).resize((self.img_size, self.img_size)))
 
         # extract features from the image
-        with torch.no_grad():
-            image = torch.from_numpy(image).unsqueeze(0).to(self.device)
-            features = self.model(image)
-            features = features.squeeze().cpu().numpy()
+        image = torch.from_numpy(image).unsqueeze(0).to(self.device)
+        features = self.model(image)
+        features = features.squeeze().cpu().numpy()
 
         # normalize the features
         if normalize:
