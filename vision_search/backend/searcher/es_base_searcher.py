@@ -3,7 +3,7 @@ from elasticsearch import Elasticsearch, RequestsHttpConnection
 from elasticsearch.helpers import bulk
 
 
-class Searcher:
+class ElasticBaseSearcher:
     def __init__(self, region="us-east-1"):
         ssm = boto3.client("ssm", region_name=region)
         path = "/clip_image_search"
