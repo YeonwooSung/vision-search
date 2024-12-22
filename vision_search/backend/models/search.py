@@ -16,3 +16,8 @@ class ElasticSearchResult(BaseModel):
 
 class TextQueryData(BaseModel):
     query: str
+
+
+class PostgresSearchResult(BaseModel):
+    results: list[Metadata]
+    request_id: str
