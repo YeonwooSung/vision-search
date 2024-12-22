@@ -33,7 +33,7 @@ class PostgresBaseSearcher(metaclass=Singleton):
         try:
             if create_table:
                 session.execute('DROP TABLE IF EXISTS images')
-                session.execute('CREATE TABLE images (id bigserial PRIMARY KEY, embedding vector(512))')
+                session.execute('CREATE TABLE images (id bigserial PRIMARY KEY, embedding vector(512), path text)')
 
             session.execute('CREATE INDEX idx_images_embedding ON images USING ivfflat(embedding)')
             session.commit()
@@ -48,4 +48,13 @@ class PostgresBaseSearcher(metaclass=Singleton):
         pass
 
     def knn_search(self, query_features, k=10):
-        pass
+        session = self._get_session()
+        try:
+            query_embedding_list = query_features.tolist()
+            qry =  f"SELECT path, embedding <-> '{query_embedding_list}' AS score FROM images ORDER BY embedding <-> '{query_embedding_list}' LIMIT {k};"
+            result = session.execute(qry).fetchall()
+            return result
+        except Exception as e:
+            print(f"Error executing query: {e}")
+        finally:
+            session.close()
