@@ -55,4 +55,5 @@ class ElasticBaseSearcher:
                 }
             },
         }
-        return self.client.search(index=self.index_name, body=body)
+        response = self.client.search(index=self.index_name, body=body)
+        return response["hits"]["hits"]
