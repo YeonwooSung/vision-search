@@ -1,23 +1,20 @@
 from fastapi import (
     APIRouter,
     Depends,
-    UploadFile,
     HTTPException,
     Request,
-    Form,
     status,
 )
 
 # custom modules
-from backend.api.utils.image_parse import load_image_into_numpy_array
-from backend.engine.v1 import get_engine
-from backend.searcher.es_base_searcher import ElasticBaseSearcher
-from backend.models.search import SearchResult, TextQueryData
+from backend.engine import get_engine
+from backend.engine.threadpool_executor import MultimodalThreadPoolEngine
+from backend.searcher.pg_base_searcher import PostgresBaseSearcher
+from backend.models.search import TextQueryData, PostgresSearchResult
 from backend.utils import Logger
 
 
 logger = Logger()
-engine = get_engine()
 
 # Create a router for the search endpoint
 search_router = r = APIRouter()
@@ -27,7 +24,8 @@ search_router = r = APIRouter()
 async def search_by_text(
     request: Request,
     data: TextQueryData,
-    searcher: ElasticBaseSearcher = Depends(ElasticBaseSearcher),
+    engine: MultimodalThreadPoolEngine = Depends(get_engine),
+    searcher: PostgresBaseSearcher = Depends(PostgresBaseSearcher),
 ):
     req_id = request.state.request_id
 
@@ -35,9 +33,9 @@ async def search_by_text(
     if not query or len(query) < 3:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Query must be at least 3 characters long")
 
-    # search images by full text search via metadata in the database
-    #TODO: implement the search logic here
-    results = []
+    # search images by using text embeddings
+    query_features = await engine.arun_engine_with_text(query)
+    results = searcher.knn_search(query_features, k=10)
 
     # return the search results
-    return SearchResult(results=results, req_id=req_id)
+    return PostgresSearchResult(results=results, request_id=req_id)

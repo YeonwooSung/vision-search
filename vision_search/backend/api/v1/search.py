@@ -10,14 +10,14 @@ from fastapi import (
 
 # custom modules
 from backend.api.utils.image_parse import load_image_into_numpy_array
-from backend.engine.v1 import get_engine
-from backend.searcher.es_base_searcher import ElasticBaseSearcher
-from backend.models.search import ElasticSearchResult
+from backend.engine import get_engine
+from backend.engine.threadpool_executor import MultimodalThreadPoolEngine
+from backend.searcher.pg_base_searcher import PostgresBaseSearcher
+from backend.models.search import PostgresSearchResult
 from backend.utils import Logger
 
 
 logger = Logger()
-engine = get_engine()
 
 # Create a router for the search endpoint
 search_router = r = APIRouter()
@@ -27,7 +27,8 @@ search_router = r = APIRouter()
 async def search_by_image(
     request: Request,
     img_file: UploadFile = Form(...),
-    searcher: ElasticBaseSearcher = Depends(ElasticBaseSearcher),
+    engine: MultimodalThreadPoolEngine = Depends(get_engine),
+    searcher: PostgresBaseSearcher = Depends(PostgresBaseSearcher),
 ):
     req_id = request.state.request_id
 
@@ -41,8 +42,7 @@ async def search_by_image(
     features = engine.arun_engine(image)
 
     # search images via vector similarity
-    response = searcher.knn_search(features, k=10)
-    results = response["hits"]["hits"]
+    results = searcher.knn_search(features, k=10)
 
     # return the search results
-    return ElasticSearchResult(hits=results, request_id=req_id)
+    return PostgresSearchResult(results=results, request_id=req_id)
