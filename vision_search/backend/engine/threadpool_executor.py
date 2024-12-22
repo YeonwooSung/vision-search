@@ -4,8 +4,9 @@ import numpy as np
 # custom module
 from .feature_extractor import CLIPFeatureExtractor
 
+
 class MultimodalThreadPoolEngine:
-    def __init__(self, model: str = "resnet34", device: str = "cpu", img_size: int = 224) -> None:
+    def __init__(self, model: str = "openai/clip-vit-large-patch14", device: str = "cpu", img_size: int = 224) -> None:
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.feature_extractor = CLIPFeatureExtractor(model_path=model, device=device, img_size=img_size)
 
