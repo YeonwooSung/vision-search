@@ -5,3 +5,5 @@ This repository provides 2 different implementations of the vision search engine
 
 1. [web application with full-stack implementation](./frontend)
 2. [RESTful API with backend implementation](./backend/)
+
+![vision search web](./imgs/screenshot.png)
