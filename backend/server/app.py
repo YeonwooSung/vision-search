@@ -47,10 +47,7 @@ async def lifespan(app: FastAPI):
     # gc optimization
     gc_optimization_on_startup()
 
-    #TODO open redis connection for lifespan
     yield
-
-    #TODO: Add code to clean up the app context
 
 
 def init_app(
