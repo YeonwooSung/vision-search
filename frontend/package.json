@@ -1,0 +1,53 @@
+{
+  "name": "vision-search",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "upload": "tsx lib/ai/0-upload.ts",
+    "generate-metadata": "tsx lib/ai/1-generate-metadata.ts",
+    "embed-and-save": "tsx lib/ai/2-embed-and-save.ts"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^1.0.8",
+    "@radix-ui/react-slot": "^1.1.0",
+    "@vercel/blob": "^0.27.0",
+    "@vercel/kv": "^3.0.0",
+    "@vercel/postgres": "^0.10.0",
+    "ai": "^4.0.16",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "drizzle-orm": "^0.38.1",
+    "geist": "^1.3.1",
+    "lucide-react": "^0.468.0",
+    "nanoid": "^5.0.9",
+    "next": "15.1.0",
+    "postgres": "^3.4.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sharp": "^0.33.5",
+    "tailwind-merge": "^2.5.5",
+    "tailwindcss-animate": "^1.0.7",
+    "use-debounce": "^10.0.4",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.13",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "dotenv": "^16.4.7",
+    "drizzle-kit": "^0.30.0",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "15.1.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.16",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}
